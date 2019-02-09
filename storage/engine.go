@@ -12,6 +12,7 @@ import (
 	platform "github.com/influxdata/influxdb"
 	"github.com/influxdata/influxdb/logger"
 	"github.com/influxdata/influxdb/models"
+	"github.com/influxdata/influxdb/storage/epoch"
 	"github.com/influxdata/influxdb/storage/wal"
 	"github.com/influxdata/influxdb/tsdb"
 	"github.com/influxdata/influxdb/tsdb/tsi1"
@@ -42,6 +43,7 @@ type Engine struct {
 	engine            *tsm1.Engine
 	wal               *wal.WAL
 	retentionEnforcer *retentionEnforcer
+	epochTracker      *epoch.Tracker
 
 	defaultMetricLabels prometheus.Labels
 
@@ -109,6 +111,7 @@ func NewEngine(path string, c Config, options ...Option) *Engine {
 	e := &Engine{
 		config:              c,
 		path:                path,
+		epochTracker:        epoch.NewTracker(),
 		defaultMetricLabels: prometheus.Labels{},
 		logger:              zap.NewNop(),
 	}
@@ -394,6 +397,15 @@ func (e *Engine) WritePoints(points []models.Point) error {
 		j++
 	}
 	collection.Truncate(j)
+
+	// enter the epoch tracker and wait for any matchers
+	matchers, gen := e.epochTracker.StartWrite()
+	defer e.epochTracker.EndWrite(gen)
+	for _, matcher := range matchers {
+		if matcher.Matches(collection.Points) {
+			matcher.Wait()
+		}
+	}
 
 	e.mu.RLock()
 	defer e.mu.RUnlock()

@@ -23,10 +23,7 @@ func NewGuard() *Guard {
 
 // Matches returns true if any of the points match the Guard.
 func (g *Guard) Matches(points []models.Point) bool {
-	if g == nil {
-		return true
-	}
-	return false
+	return g == nil
 }
 
 // Wait blocks until the Guard has been marked Done.
