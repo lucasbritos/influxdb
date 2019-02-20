@@ -64,4 +64,21 @@ from(bucket:"x")
 			t.Fail()
 		}
 	})
+	t.Run("test add new option", func(t *testing.T) {
+		tu := &platform.TaskUpdate{}
+		tu.Options.Offset = 30 * time.Second
+		if err := tu.UpdateFlux(`option task = {every: 20s, name: "foo"} from(bucket:"x") |> range(start:-1h)`); err != nil {
+			t.Fatal(err)
+		}
+
+		op, err := options.FromScript(*tu.Flux)
+		if err != nil {
+			t.Error(err)
+		}
+		if op.Offset != 30*time.Second {
+			t.Logf("expected every to be 10s but was %s", op.Every)
+			t.Fail()
+		}
+	})
+
 }
