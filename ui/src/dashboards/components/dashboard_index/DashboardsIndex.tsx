@@ -117,6 +117,7 @@ class DashboardIndex extends PureComponent<Props, State> {
               <SearchWidget
                 placeholderText="Filter dashboards by name..."
                 onSearch={this.handleFilterDashboards}
+                searchTerm={searchTerm}
               />
               <AddResourceDropdown
                 onSelectNew={this.handleCreateDashboard}
@@ -141,6 +142,7 @@ class DashboardIndex extends PureComponent<Props, State> {
                 notify={notify}
                 searchTerm={searchTerm}
                 showOwnerColumn={true}
+                onFilterChange={this.handleFilterDashboards}
               />
             </div>
           </Page.Contents>

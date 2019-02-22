@@ -37,6 +37,7 @@ interface Props {
   onEditLabels: (task: Task) => void
   onRunTask: (taskID: string) => void
   onUpdate?: (task: Task) => void
+  onFilterChange: (searchTerm: string) => void
 }
 
 export class TaskRow extends PureComponent<Props & WithRouterProps> {
@@ -45,7 +46,7 @@ export class TaskRow extends PureComponent<Props & WithRouterProps> {
 
     return (
       <IndexList.Row disabled={!this.isTaskActive}>
-        <IndexList.Cell>
+        <IndexList.Cell testID="tasks-row--resource-cell">
           <ComponentSpacer
             stackChildren={Stack.Columns}
             align={Alignment.Right}
@@ -196,10 +197,17 @@ export class TaskRow extends PureComponent<Props & WithRouterProps> {
             colorHex={label.properties.color}
             name={label.name}
             description={label.properties.description}
+            onClick={this.handleLabelClick}
           />
         ))}
       </Label.Container>
     )
+  }
+
+  private handleLabelClick = (id: string) => {
+    const label = this.props.task.labels.find(l => l.id === id)
+
+    this.props.onFilterChange(label.name)
   }
 
   private get isTaskActive(): boolean {

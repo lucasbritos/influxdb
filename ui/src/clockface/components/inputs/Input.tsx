@@ -49,6 +49,7 @@ interface Props {
   maxLength?: number
   tabIndex?: number
   dataTest?: string
+  testID?: string
 }
 
 class Input extends Component<Props> {
@@ -86,6 +87,7 @@ class Input extends Component<Props> {
       autocomplete,
       tabIndex,
       dataTest,
+      testID,
     } = this.props
 
     return (
@@ -113,6 +115,7 @@ class Input extends Component<Props> {
           maxLength={maxLength}
           tabIndex={tabIndex}
           data-test={dataTest}
+          data-testid={testID}
         />
         {this.icon}
         {this.statusIndicator}

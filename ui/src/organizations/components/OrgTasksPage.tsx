@@ -103,6 +103,7 @@ class OrgTasksPage extends PureComponent<Props, State> {
             value={searchTerm}
             onChange={this.handleFilterChange}
             onBlur={this.handleFilterBlur}
+            testID={`org-tasks--search-field ${searchTerm}`}
           />
           <TasksHeader
             onCreateTask={this.handleCreateTask}
@@ -112,6 +113,7 @@ class OrgTasksPage extends PureComponent<Props, State> {
             toggleOverlay={this.handleToggleImportOverlay}
             showOrgDropdown={false}
             showFilter={false}
+            searchTerm={searchTerm}
           />
           <FilterList<Task>
             searchTerm={searchTerm}
@@ -132,6 +134,7 @@ class OrgTasksPage extends PureComponent<Props, State> {
                 onRemoveTaskLabels={onRemoveTaskLabels}
                 onUpdate={this.handleUpdateTask}
                 onRunTask={onRunTask}
+                onFilterChange={setSearchTerm}
               />
             )}
           </FilterList>

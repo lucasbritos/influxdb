@@ -18,6 +18,7 @@ interface Props {
   toggleOverlay: () => void
   showOrgDropdown?: boolean
   showFilter?: boolean
+  searchTerm: string
 }
 
 export default class TasksHeader extends PureComponent<Props> {
@@ -48,6 +49,7 @@ export default class TasksHeader extends PureComponent<Props> {
             active={showInactive}
             size={ComponentSize.ExtraSmall}
             onChange={setShowInactive}
+            testID="tasks-header--toggle-active"
           />
           {this.filterSearch}
           {this.orgDropDown}
@@ -71,13 +73,14 @@ export default class TasksHeader extends PureComponent<Props> {
   }
 
   private get filterSearch(): JSX.Element {
-    const {setSearchTerm, showFilter} = this.props
+    const {setSearchTerm, showFilter, searchTerm} = this.props
 
     if (showFilter) {
       return (
         <SearchWidget
           placeholderText="Filter tasks by name..."
           onSearch={setSearchTerm}
+          searchTerm={searchTerm}
         />
       )
     }

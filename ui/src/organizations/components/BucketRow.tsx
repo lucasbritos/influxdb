@@ -28,6 +28,7 @@ interface Props {
   onDeleteBucket: (b: PrettyBucket) => void
   onAddData: (b: PrettyBucket, d: DataLoaderType) => void
   onUpdateBucket: (b: PrettyBucket) => void
+  onFilterChange: (searchTerm: string) => void
 }
 
 export default class BucketRow extends PureComponent<Props> {
