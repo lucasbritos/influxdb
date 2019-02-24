@@ -4,7 +4,7 @@ WORKDIR /go/src/github.com/influxdata/influxdb
 COPY Gopkg.toml Gopkg.lock ./
 RUN dep ensure -vendor-only
 COPY . /go/src/github.com/influxdata/influxdb
-RUN go install ./cmd/...
+RUN go install -tags uint64 ./cmd/...
 
 FROM debian:stretch
 COPY --from=builder /go/bin/* /usr/bin/
